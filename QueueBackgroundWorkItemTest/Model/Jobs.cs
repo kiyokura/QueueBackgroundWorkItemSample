@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dapper;
 using OfficeOpenXml;
 using System.Web.Hosting;
+using Microsoft.AspNet.SignalR;
 
 namespace QueueBackgroundWorkItemTest.Model
 {
@@ -74,6 +75,10 @@ namespace QueueBackgroundWorkItemTest.Model
             await SaveFile(fileBin, cn, tr);
 
             tr.Commit();
+
+            //
+            var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+            context.Clients.All.sendMessage("保存完了しました");
           }
         }
         catch (Exception e)
